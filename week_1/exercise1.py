@@ -19,7 +19,7 @@ rest van het programma gebruikt kunnen worden:
 Het is de bedoeling om de optimale waarden voor theta te vinden.
 '''
 
-with open('machine_learning.week1_data.pkl','rb') as f:
+with open('week1_data.pkl','rb') as f:
   data=pickle.load(f) 
 
 m,n = data.shape
