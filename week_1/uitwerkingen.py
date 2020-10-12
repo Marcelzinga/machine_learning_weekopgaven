@@ -55,6 +55,13 @@ def computeCost(X, y, theta):
     J = 0
 
     # YOUR CODE HERE
+    m,n = X.shape
+
+    predictions = np.dot(X, theta)
+    errors = (predictions - y) ** 2
+    J = sum(errors) / (m*2)
+
+    J = J[0]
 
     return J
 

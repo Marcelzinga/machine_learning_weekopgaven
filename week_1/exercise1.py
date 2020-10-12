@@ -20,9 +20,7 @@ Het is de bedoeling om de optimale waarden voor theta te vinden.
 '''
 
 with open('week1_data.pkl','rb') as f:
-  data=pickle.load(f) 
-
-m,n = data.shape
+  data=pickle.load(f)
 
 #Enen toevoegen als eerste kolom van X, zodat we op elke regel een
 #vector hebben waarvan de grootte correspondeert met theta.
