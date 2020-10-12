@@ -88,6 +88,20 @@ def gradientDescent(X, y, theta, alpha, num_iters):
     m,n = X.shape
 
     # YOUR CODE HERE
+    for i in range(num_iters):
+        #TODO refactor zodat for loop niet hoeft?
+        for iX in range(m):
+            singleprediction = np.dot(X[iX], theta.T)
+
+            error = (singleprediction - y[iX])
+
+            vermenigvuldiging3 = error * X[iX]
+
+            theta = theta - alpha * vermenigvuldiging3
+
+        print("theta: ")
+        print(theta)
+
 
     # aan het eind van deze loop retourneren we de nieuwe waarde van theta
     # (wat is de dimensionaliteit van theta op dit moment?).
