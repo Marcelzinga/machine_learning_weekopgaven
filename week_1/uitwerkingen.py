@@ -20,7 +20,15 @@ def drawGraph(data):
     # Maak gebruik van pytplot.scatter om dit voor elkaar te krijgen.
 
     #YOUR CODE HERE
-    pass
+    X = data[:, [0]]
+    y = data[:, [1]]
+
+
+    plt.scatter(X, y)
+    plt.title('Verhouding winst van vervoerder op populatie van stad')
+    plt.xlabel('Populatie (10k personen)')
+    plt.ylabel('Winst(10k$)')
+    plt.show()
 
 
 
