@@ -23,7 +23,6 @@ def drawGraph(data):
     X = data[:, [0]]
     y = data[:, [1]]
 
-
     plt.scatter(X, y)
     plt.title('Verhouding winst van vervoerder op populatie van stad')
     plt.xlabel('Populatie (10k personen)')
@@ -89,15 +88,46 @@ def gradientDescent(X, y, theta, alpha, num_iters):
 
     # YOUR CODE HERE
     for i in range(num_iters):
-        #TODO refactor zodat for loop niet hoeft?
-        for iX in range(m):
-            singleprediction = np.dot(X[iX], theta.T)
+        predictions = np.dot(X, theta.T)
+        errors = (predictions - y)
 
-            error = (singleprediction - y[iX])
+        #vermenigvuldiging3 = np.dot(X[:, 1].T.reshape(-1, 1), errors)
+        #Todo terugkomen op deze regel dit werkt maar lijkt me vreemd
+        #vermenigvuldiging3 = np.multiply(X[:, 1].T.reshape(-1, 1), errors)
 
-            vermenigvuldiging3 = error * X[iX]
 
-            theta = theta - alpha * vermenigvuldiging3
+        vermenigvuldiging3 = X * errors
+
+
+
+        print("debug")
+        J = sum(vermenigvuldiging3) / (m * 2)
+        print(J)
+        print("test 2")
+        print(theta)
+        theta = theta - (alpha * J)
+
+
+
+        #print(np.dot(alpha, vermenigvuldiging3).shape)
+        #theta = theta - np.dot(alpha, vermenigvuldiging3)
+        #X{0,: }
+
+
+        # Naieve implementatie, dit geeft een antwoord dat in de buurt komt van het verwachte antwoord
+        # for iX in range(m):
+        #     singleprediction = np.dot(X[iX], theta.T)
+        #
+        #     error = (singleprediction - y[iX])
+        #
+        #     vermenigvuldiging3 = error * X[iX]
+        #
+        #     print(X[iX])
+        #     print(vermenigvuldiging3)
+        #     print("wat word theta?")
+        #     print(theta - alpha * vermenigvuldiging3)
+        #
+        #     theta = theta - alpha * vermenigvuldiging3
 
         print("theta: ")
         print(theta)
@@ -128,7 +158,10 @@ def contourPlot(X, y):
 
     J_vals = np.zeros( (len(t2), len(t2)) )
 
-    #YOUR CODE HERE 
+    #YOUR CODE HERE
+    print(t1)
+    print(".-.")
+    print(t2)
 
     surf = ax.plot_surface(T1, T2, J_vals, rstride=1, cstride=1, cmap=cm.coolwarm, linewidth=0, antialiased=False)
 
