@@ -87,52 +87,18 @@ def gradientDescent(X, y, theta, alpha, num_iters):
     m,n = X.shape
 
     # YOUR CODE HERE
+
+    #I = np.arrange(num_iters)
     for i in range(num_iters):
         predictions = np.dot(X, theta.T)
-        errors = (predictions - y)
+        errors = np.subtract(predictions, y)
+        vermenigvuldiging3 = np.multiply(X, errors)
 
-        #vermenigvuldiging3 = np.dot(X[:, 1].T.reshape(-1, 1), errors)
-        #Todo terugkomen op deze regel dit werkt maar lijkt me vreemd
-        #vermenigvuldiging3 = np.multiply(X[:, 1].T.reshape(-1, 1), errors)
+        J = sum(vermenigvuldiging3) / (m*2)
 
+        theta = np.subtract(theta, (alpha * J))
 
-        vermenigvuldiging3 = X * errors
-
-
-
-        print("debug")
-        J = sum(vermenigvuldiging3) / (m * 2)
-        print(J)
-        print("test 2")
-        print(theta)
-        theta = theta - (alpha * J)
-
-
-
-        #print(np.dot(alpha, vermenigvuldiging3).shape)
-        #theta = theta - np.dot(alpha, vermenigvuldiging3)
-        #X{0,: }
-
-
-        # Naieve implementatie, dit geeft een antwoord dat in de buurt komt van het verwachte antwoord
-        # for iX in range(m):
-        #     singleprediction = np.dot(X[iX], theta.T)
-        #
-        #     error = (singleprediction - y[iX])
-        #
-        #     vermenigvuldiging3 = error * X[iX]
-        #
-        #     print(X[iX])
-        #     print(vermenigvuldiging3)
-        #     print("wat word theta?")
-        #     print(theta - alpha * vermenigvuldiging3)
-        #
-        #     theta = theta - alpha * vermenigvuldiging3
-
-        print("theta: ")
-        print(theta)
-
-
+    theta = np.around(theta, decimals=3)
     # aan het eind van deze loop retourneren we de nieuwe waarde van theta
     # (wat is de dimensionaliteit van theta op dit moment?).
 

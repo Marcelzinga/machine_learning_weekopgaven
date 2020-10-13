@@ -46,8 +46,8 @@ input ("Druk op return om verder te gaan...");
 
 # ========================  OPGAVE 3 ========================
 print ("\nOpgave 3: gradientDescent")
-#alpha = 0.01
-alpha = 0.02
+alpha = 0.01
+#alpha = 0.02
 num_iters = 1500
 theta = np.zeros( (1,2) )
 theta = gradientDescent(X, y, theta, alpha, num_iters)
