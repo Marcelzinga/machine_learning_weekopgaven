@@ -124,12 +124,13 @@ def contourPlot(X, y):
 
     J_vals = np.zeros( (len(t2), len(t2)) )
 
+    # YOUR CODE HERE
 
     theta = np.empty((10000, 2))
+
     row = 0
     for i in range(len(t1)):
         for j in range(len(t2)):
-
             theta[row] = (t1[i], t2[j])
             row += 1
 
@@ -147,8 +148,6 @@ def contourPlot(X, y):
 
     costs = costs.reshape(100, 100)
     J_vals = np.add(J_vals, costs)
-
-
 
     surf = ax.plot_surface(T1, T2, J_vals, rstride=1, cstride=1, cmap=cm.coolwarm, linewidth=0, antialiased=False)
 
