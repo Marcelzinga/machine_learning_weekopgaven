@@ -33,7 +33,15 @@ def get_y_matrix(y, m):
     # van de matrix 10 (0-9), maar de methode moet werken voor elke waarde van 
     # y en m
 
-    pass 
+    cols = y.T.ravel()
+
+    rows = np.arange(m)
+    data = np.ones(m)
+
+    width = np.amax(cols)   # arrays zijn zero-based
+
+    #cols -1 omdat arrays zero-based zijn, hierdoor komt 1 op positie 0 en 10 op positie 9 etc. in de array
+    return csr_matrix((data, (rows, cols-1)), shape=(m, width)).todense()
 
 
 # ==== OPGAVE 2c ==== 
