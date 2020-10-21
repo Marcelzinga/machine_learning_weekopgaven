@@ -32,8 +32,10 @@ def get_y_matrix(y, m):
     # y_i=10, dan is regel i in de matrix [0,0,...1] (in dit geval is de breedte
     # van de matrix 10 (0-9), maar de methode moet werken voor elke waarde van 
     # y en m
-
-    pass
+    row = np.arange(m)
+    col = np.subtract(y, 1).reshape(m)
+    data = np.ones(m)
+    return csr_matrix((np.ones(m), (row, col)))
 
 
 # ==== OPGAVE 2c ==== 
