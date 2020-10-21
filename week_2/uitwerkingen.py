@@ -9,7 +9,8 @@ def plotNumber(nrVector):
     # laatste index het langzaamst; als je dat niet doet, wordt het plaatje 
     # gespiegeld en geroteerd. Zie de documentatie op 
     # https://docs.scipy.org/doc/numpy/reference/generated/numpy.reshape.html
-    plt.matshow(nrVector.reshape(20, 20).T)
+    
+    plt.matshow(nrVector.reshape((20, 20), order='F'))
     plt.show()
 
 # ==== OPGAVE 2a ====
@@ -18,9 +19,8 @@ def sigmoid(z):
     # voor dat de code zowel werkt wanneer z een getal is als wanneer z een
     # vector is.
     # Maak gebruik van de methode exp() in NumPy.
-    return np.divide(1, 1 + np.exp(-z))
 
-
+    return 1 / (1 + np.exp(-z))
 
 
 # ==== OPGAVE 2b ====
@@ -33,15 +33,7 @@ def get_y_matrix(y, m):
     # van de matrix 10 (0-9), maar de methode moet werken voor elke waarde van 
     # y en m
 
-    cols = y.T.ravel()
-
-    rows = np.arange(m)
-    data = np.ones(m)
-
-    width = np.amax(cols)   # arrays zijn zero-based
-
-    #cols -1 omdat arrays zero-based zijn, hierdoor komt 1 op positie 0 en 10 op positie 9 etc. in de array
-    return csr_matrix((data, (rows, cols-1)), shape=(m, width)).todense()
+    pass
 
 
 # ==== OPGAVE 2c ==== 

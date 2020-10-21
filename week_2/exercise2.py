@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import sys
 import pickle
 
-from machine_learning.week_2.uitwerkingen import *
+from uitwerkingen import *
 
 # Helperfuncties die nodig zijn om de boel te laten werken
 # Hier hoef je niets aan te veranderen, maar bestudeer de 
@@ -26,7 +26,7 @@ def displayData(X):
         plt.subplot(5, 5, idx+1)
         x = X[idx,:].reshape(20,20)
         plt.tick_params(which='both',left=False, bottom=False, top=False, labelleft=False, labelbottom=False)
-        plt.imshow(x, cmap='gray', interpolation='nearest');
+        plt.imshow(x, cmap='gray', interpolation='nearest')
 
     plt.show()
 
