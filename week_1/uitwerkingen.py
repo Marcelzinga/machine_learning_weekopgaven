@@ -20,13 +20,11 @@ def drawGraph(data):
     # Maak gebruik van pytplot.scatter om dit voor elkaar te krijgen.
 
     #YOUR CODE HERE
-    X = data[:, [0]]
-    y = data[:, [1]]
-
-    plt.scatter(X, y)
-    plt.title('Verhouding winst van vervoerder op populatie van stad')
-    plt.xlabel('Populatie (10k personen)')
-    plt.ylabel('Winst(10k$)')
+    plt.xlabel("Populatie (10k personen)")
+    plt.ylabel("Winst (10k$)")
+    
+    x, y = data.T
+    plt.scatter(x, y)
     plt.show()
 
 
@@ -54,14 +52,14 @@ def computeCost(X, y, theta):
     J = 0
 
     # YOUR CODE HERE
-    m,n = X.shape
+    m = X.shape[0]
+    hypothesis = np.dot(X, theta)
+    errors = hypothesis - y
+    sse = np.square(errors).sum()
+    J = sse / (m * 2)
 
-    predictions = np.dot(X, theta)
-    errors = (predictions - y) ** 2
+    return J
 
-    J = sum(errors) / (m*2)
-
-    return float(J)
 
 
 def gradientDescent(X, y, theta, alpha, num_iters):
@@ -83,22 +81,14 @@ def gradientDescent(X, y, theta, alpha, num_iters):
     #      alpha keer het gemiddelde van de som van de vermenigvuldiging uit 3
 
     m,n = X.shape
-    #alpha = 0.02
-    #TODO gebruik de afgeleide zie college 2 of de 2 in m*2 weghalen aangezien het
 
     # YOUR CODE HERE
-
-    #I = np.arrange(num_iters)
     for i in range(num_iters):
-        predictions = np.dot(X, theta.T)
-        errors = np.subtract(predictions, y)
-        vermenigvuldiging3 = np.multiply(X, errors)
+        hypothisis = np.dot(X, theta.T)
+        errors = hypothisis - y
+        mul_errors = errors * X
+        theta = theta - mul_errors.sum(axis=0) / m * alpha
 
-        J = sum(vermenigvuldiging3) / m
-
-        theta = np.subtract(theta, (alpha * J))
-
-    theta = np.around(theta, decimals=3)
     # aan het eind van deze loop retourneren we de nieuwe waarde van theta
     # (wat is de dimensionaliteit van theta op dit moment?).
 
@@ -124,30 +114,10 @@ def contourPlot(X, y):
 
     J_vals = np.zeros( (len(t2), len(t2)) )
 
-    # YOUR CODE HERE
-
-    theta = np.empty((10000, 2))
-
-    row = 0
+    #YOUR CODE HERE
     for i in range(len(t1)):
         for j in range(len(t2)):
-            theta[row] = (t1[i], t2[j])
-            row += 1
-
-
-    #J_vals = computeCost(X, y, theta[1])
-    # Jvals + theta op juiste  J_vals[t1j][t2j]
-    #np.nditer(theta)
-    costs = np.empty((0, 0))
-    for rowindex in range(len(theta)):
-        theta_row = np.empty((2, 1))
-        theta_row[0] = np.asscalar(theta[rowindex][0])
-        theta_row[1] = np.asscalar(theta[rowindex][1])
-
-        costs = np.append(costs, computeCost(X,y, theta_row))
-
-    costs = costs.reshape(100, 100)
-    J_vals = np.add(J_vals, costs)
+            J_vals[i][j] = computeCost(X, y, np.array([t1[i], t2[j]]).reshape(2, 1))
 
     surf = ax.plot_surface(T1, T2, J_vals, rstride=1, cstride=1, cmap=cm.coolwarm, linewidth=0, antialiased=False)
 
