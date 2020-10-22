@@ -98,8 +98,8 @@ def sigmoidGradient(z):
     # Retourneer hier de waarde van de afgeleide van de sigmoïdefunctie.
     # Zie de opgave voor de exacte formule. Zorg ervoor dat deze werkt met
     # scalaire waarden en met vectoren.
-
-    pass
+    g = sigmoid(z)
+    return np.multiply(g, 1 - g)
 
 # ==== OPGAVE 3b ====
 def nnCheckGradients(Theta1, Theta2, X, y): 
@@ -110,7 +110,7 @@ def nnCheckGradients(Theta1, Theta2, X, y):
     Delta3 = np.zeros(Theta2.shape)
     m = 1 #voorbeeldwaarde; dit moet je natuurlijk aanpassen naar de echte waarde van m
 
-    for i in range(m): 
+    for i in range(m):
         #YOUR CODE HERE
         pass
 
