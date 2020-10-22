@@ -2,7 +2,7 @@ import numpy as np
 import sys
 import pickle
 
-from machine_learning.week_1.uitwerkingen import *
+from uitwerkingen import *
 
 '''
 Onderstaande regels laden het pickle-bestand in waarin de data is opgeslagen.
@@ -20,7 +20,9 @@ Het is de bedoeling om de optimale waarden voor theta te vinden.
 '''
 
 with open('week1_data.pkl','rb') as f:
-  data=pickle.load(f)
+  data=pickle.load(f) 
+
+m,n = data.shape
 
 #Enen toevoegen als eerste kolom van X, zodat we op elke regel een
 #vector hebben waarvan de grootte correspondeert met theta.
@@ -55,4 +57,5 @@ print ("Deze waarde zou rond de (-3.63, 1.16) moeten liggen.");
 input ("Druk op return om verder te gaan...");
 
 # ========================  OPGAVE 4 ========================
+print ("\nOpgave 4: contour plot")
 contourPlot(X, y)

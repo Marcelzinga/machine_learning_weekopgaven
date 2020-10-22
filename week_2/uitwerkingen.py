@@ -9,7 +9,8 @@ def plotNumber(nrVector):
     # laatste index het langzaamst; als je dat niet doet, wordt het plaatje 
     # gespiegeld en geroteerd. Zie de documentatie op 
     # https://docs.scipy.org/doc/numpy/reference/generated/numpy.reshape.html
-    plt.matshow(nrVector.reshape(20, 20).T)
+    
+    plt.matshow(nrVector.reshape((20, 20), order='F'))
     plt.show()
 
 # ==== OPGAVE 2a ====
@@ -18,9 +19,8 @@ def sigmoid(z):
     # voor dat de code zowel werkt wanneer z een getal is als wanneer z een
     # vector is.
     # Maak gebruik van de methode exp() in NumPy.
-    return np.divide(1, 1 + np.exp(-z))
 
-
+    return 1 / (1 + np.exp(-z))
 
 
 # ==== OPGAVE 2b ====
@@ -32,16 +32,9 @@ def get_y_matrix(y, m):
     # y_i=10, dan is regel i in de matrix [0,0,...1] (in dit geval is de breedte
     # van de matrix 10 (0-9), maar de methode moet werken voor elke waarde van 
     # y en m
-
-    cols = y.T.ravel()
-
-    rows = np.arange(m)
-    data = np.ones(m)
-
-    width = np.amax(cols)   # arrays zijn zero-based
-
-    #cols -1 omdat arrays zero-based zijn, hierdoor komt 1 op positie 0 en 10 op positie 9 etc. in de array
-    return csr_matrix((data, (rows, cols-1)), shape=(m, width)).todense()
+    row = np.arange(m)
+    col = np.subtract(y, 1).reshape(m)
+    return csr_matrix((np.ones(m), (row, col)))
 
 
 # ==== OPGAVE 2c ==== 
@@ -69,7 +62,15 @@ def predictNumber(Theta1, Theta2, X):
     # Voeg enen toe aan het begin van elke stap en reshape de uiteindelijke
     # vector zodat deze dezelfde dimensionaliteit heeft als y in de exercise.
 
-    pass
+    m, n = X.shape
+    a1 = np.c_[np.ones(m), X]
+    a2 = sigmoid(np.dot(a1, Theta1.T))
+    
+    m, n = a2.shape
+    a2 = np.c_[np.ones(m), a2]
+    out = sigmoid(np.dot(a2, Theta2.T))
+
+    return out
 
 
 
@@ -84,7 +85,14 @@ def computeCost(Theta1, Theta2, X, y):
     # Maak gebruik van de methode get_y_matrix() die je in opgave 2a hebt gemaakt
     # om deze om te zetten naar een matrix. 
 
-    pass
+    m, n = X.shape
+    Y = get_y_matrix(y, m)
+    T = predictNumber(Theta1, Theta2, X)
+    
+    J = -y * np.log(T) - (1 - y) * np.log(T)
+    # J = (-y * np.log(T) - (1 - y) * np.log(T)).sum(axis=1).mean()
+
+    return J
 
 
 
