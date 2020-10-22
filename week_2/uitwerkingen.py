@@ -34,7 +34,7 @@ def get_y_matrix(y, m):
     # y en m
     row = np.arange(m)
     col = np.subtract(y, 1).reshape(m)
-    return csr_matrix((np.ones(m), (row, col)))
+    return csr_matrix((np.ones(m), (row, col))).todense()
 
 
 # ==== OPGAVE 2c ==== 
@@ -87,13 +87,10 @@ def computeCost(Theta1, Theta2, X, y):
 
     m, n = X.shape
     Y = get_y_matrix(y, m)
-    T = predictNumber(Theta1, Theta2, X)
-    
-    J = -y * np.log(T) - (1 - y) * np.log(T)
-    # J = (-y * np.log(T) - (1 - y) * np.log(T)).sum(axis=1).mean()
+    P = predictNumber(Theta1, Theta2, X)
+    J = np.multiply(-Y, np.log(P)) - np.multiply(1 - Y, np.log(1 - P))
 
-    return J
-
+    return J.sum(axis=1).mean()
 
 
 # ==== OPGAVE 3a ====
