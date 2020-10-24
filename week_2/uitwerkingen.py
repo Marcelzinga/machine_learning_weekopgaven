@@ -108,13 +108,39 @@ def nnCheckGradients(Theta1, Theta2, X, y):
 
     Delta2 = np.zeros(Theta1.shape)
     Delta3 = np.zeros(Theta2.shape)
-    m = 1 #voorbeeldwaarde; dit moet je natuurlijk aanpassen naar de echte waarde van m
+    m = 5000 #voorbeeldwaarde; dit moet je natuurlijk aanpassen naar de echte waarde van m
 
+    ysparse = get_y_matrix(y, y.shape[0])
     for i in range(m):
         #YOUR CODE HERE
-        pass
+        m, n = X.shape
+        a1 = np.concatenate((np.ones(1), X[i]), axis=0)
+        z1 = np.dot(a1, Theta1.T)
+        a2 = sigmoid(z1)
+
+
+        a2 = np.concatenate((np.ones(1), a2), axis=0)
+        z2 = np.dot(a2, Theta2.T)
+        a3 = sigmoid(z2)
+
+        d3 = a3 - ysparse[i]
+
+        sigmoidgrad = np.concatenate((np.ones(1), sigmoidGradient(z1)), axis=0)
+        d2 = np.multiply(np.dot(d3, Theta2), sigmoidgrad.T) # 1,26 * 1.10 moet 1.26*1.26 zijn
+
+        d2 = np.delete(d2, 0)
+
+
+
+
+        #Delta3 += np.dot(d3, a2.T) #gegeven in vragenuur
+        Delta3 += np.dot(d3.T, a2.reshape(1, 26))
+        #Delta2 += np.dot(d2, a1.T) #gegeven in vragenuur
+        Delta2 += np.dot(d2.T, a1.reshape(1, 401))
+
+
 
     Delta2_grad = Delta2 / m
     Delta3_grad = Delta3 / m
-    
+
     return Delta2_grad, Delta3_grad
