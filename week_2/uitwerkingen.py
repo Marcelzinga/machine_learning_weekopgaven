@@ -108,35 +108,30 @@ def nnCheckGradients(Theta1, Theta2, X, y):
 
     Delta2 = np.zeros(Theta1.shape)
     Delta3 = np.zeros(Theta2.shape)
-    m = 5000 #voorbeeldwaarde; dit moet je natuurlijk aanpassen naar de echte waarde van m
+    m = X.shape[0] #voorbeeldwaarde; dit moet je natuurlijk aanpassen naar de echte waarde van m
 
     ysparse = get_y_matrix(y, y.shape[0])
+
+    # forward propagation
+    a1 = np.c_[np.ones(m), X]
+    z2 = np.dot(a1, Theta1.T)
+    a2 = sigmoid(z2)
+
+    a2 = np.c_[np.ones(m), a2]
+    z3 = np.dot(a2, Theta2.T)
+    a3 = sigmoid(z3)
+
+    # back propagation
     for i in range(m):
         #YOUR CODE HERE
+        d3 = a3[i] - ysparse[i]
 
-        a1 = np.concatenate((np.ones(1), X[i]), axis=0)
-        z2 = np.dot(a1, Theta1.T)
-        a2 = sigmoid(z2)
-
-
-        a2 = np.concatenate((np.ones(1), a2), axis=0)
-        z3 = np.dot(a2, Theta2.T)
-        a3 = sigmoid(z3)
-
-        d3 = a3 - ysparse[i]
-
-        sigmoidgrad = np.concatenate((np.ones(1), sigmoidGradient(z2)), axis=0)
+        sigmoidgrad = np.concatenate((np.ones(1), sigmoidGradient(z2[i])), axis=0)
         d2 = np.multiply(np.dot(d3, Theta2), sigmoidgrad.T)
-
         d2 = np.delete(d2, 0)
 
-
-
-
-        #Delta3 += np.dot(d3, a2.T) #gegeven in vragenuur
-        Delta3 += np.dot(d3.T, a2.reshape(1, 26))
-        #Delta2 += np.dot(d2, a1.T) #gegeven in vragenuur
-        Delta2 += np.dot(d2.T, a1.reshape(1, 401))
+        Delta3 += np.dot(d3.T, a2[i].reshape(1, 26))
+        Delta2 += np.dot(d2.T, a1[i].reshape(1, 401))
 
 
 
