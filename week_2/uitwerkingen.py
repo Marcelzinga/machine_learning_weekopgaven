@@ -113,20 +113,20 @@ def nnCheckGradients(Theta1, Theta2, X, y):
     ysparse = get_y_matrix(y, y.shape[0])
     for i in range(m):
         #YOUR CODE HERE
-        m, n = X.shape
+
         a1 = np.concatenate((np.ones(1), X[i]), axis=0)
-        z1 = np.dot(a1, Theta1.T)
-        a2 = sigmoid(z1)
+        z2 = np.dot(a1, Theta1.T)
+        a2 = sigmoid(z2)
 
 
         a2 = np.concatenate((np.ones(1), a2), axis=0)
-        z2 = np.dot(a2, Theta2.T)
-        a3 = sigmoid(z2)
+        z3 = np.dot(a2, Theta2.T)
+        a3 = sigmoid(z3)
 
         d3 = a3 - ysparse[i]
 
-        sigmoidgrad = np.concatenate((np.ones(1), sigmoidGradient(z1)), axis=0)
-        d2 = np.multiply(np.dot(d3, Theta2), sigmoidgrad.T) # 1,26 * 1.10 moet 1.26*1.26 zijn
+        sigmoidgrad = np.concatenate((np.ones(1), sigmoidGradient(z2)), axis=0)
+        d2 = np.multiply(np.dot(d3, Theta2), sigmoidgrad.T)
 
         d2 = np.delete(d2, 0)
 
