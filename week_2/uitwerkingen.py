@@ -34,7 +34,7 @@ def get_y_matrix(y, m):
     # y en m
     row = np.arange(m)
     col = np.subtract(y, 1).reshape(m)
-    return csr_matrix((np.ones(m), (row, col))).todense()
+    return csr_matrix((np.ones(m), (row, col))).toarray()
 
 
 # ==== OPGAVE 2c ==== 
@@ -125,13 +125,14 @@ def nnCheckGradients(Theta1, Theta2, X, y):
     for i in range(m):
         #YOUR CODE HERE
         d3 = a3[i] - ysparse[i]
+        d3 = d3.reshape(10, 1)
 
         sigmoidgrad = np.concatenate((np.ones(1), sigmoidGradient(z2[i])), axis=0)
-        d2 = np.multiply(np.dot(d3, Theta2), sigmoidgrad.T)
-        d2 = np.delete(d2, 0)
+        d2 = np.multiply(np.dot(d3.T, Theta2), sigmoidgrad.T)
+        d2 = np.delete(d2, 0).reshape(25, 1) #remove de bias
 
-        Delta3 += np.dot(d3.T, a2[i].reshape(1, 26))
-        Delta2 += np.dot(d2.T, a1[i].reshape(1, 401))
+        Delta3 += np.dot(d3, a2[i].reshape(1, 26))
+        Delta2 += np.dot(d2, a1[i].reshape(1, 401))
 
 
 
