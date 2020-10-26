@@ -69,16 +69,14 @@ print ("")
 print ("Bepalen van de confusion matrix van het getrainde netwerk.")
 pred = np.argmax(model.predict(test_images), axis=1)
 cm = confMatrix(test_labels, pred)
-print("---")
-import seaborn as sns
-sns.heatmap(cm)
 
-print("---")
+data = cm.numpy()
 
-sess = tf.Session() # tf.Session bestaat niet?
-sess = tf.compat.v1.Session
-with sess.as_default():
-    data = cm.eval()
+
+#sess = tf.Session() # tf.Session bestaat niet?
+#sess = tf.compat.v1.Session
+#with sess.as_default():
+#    data = cm.eval()
 
 print ("De confusion matrix:") 
 if (len(sys.argv)>1 and sys.argv[1]=='skip') :
