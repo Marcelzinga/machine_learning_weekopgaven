@@ -25,8 +25,8 @@ def scaleData(X):
     # Deel alle elementen in de matrix 'element wise' door de grootste waarde in deze matrix.
 
     # YOUR CODE HERE
-
-    pass
+    n = X.shape[1]
+    return np.divide(X, n)
 
 # OPGAVE 1c
 def buildModel():
