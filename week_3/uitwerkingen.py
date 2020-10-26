@@ -10,7 +10,6 @@ def plotImage(img, label):
     # Maak gebruik van plt.cm.binary voor de cmap-parameter van plt.imgshow.
 
     # YOUR CODE HERE
-    print(img.shape)
     plt.imshow(img, cmap='binary')
     plt.title(label=label)
     plt.show()
@@ -25,8 +24,7 @@ def scaleData(X):
     # Deel alle elementen in de matrix 'element wise' door de grootste waarde in deze matrix.
 
     # YOUR CODE HERE
-    n = X.shape[1]
-    return np.divide(X, n)
+    return np.divide(X, np.amax(X))
 
 # OPGAVE 1c
 def buildModel():
@@ -41,7 +39,29 @@ def buildModel():
     model = None
 
     # YOUR CODE HERE
+    model = keras.Sequential()
+    #model.add(tf.keras.Input(shape=(28 * 28,)))
+    #model.add(tf.keras.layers.Dense(784))
+    #TODO de eerste layer moet 28*28 matrix veranderen in 784
+    model.add(keras.layers.Dense(128, activation=tf.nn.relu, input_shape=(28*28,)))
+    model.add(keras.layers.Dense(10, activation=tf.nn.softmax))
+    model.compile(optimizer="Adam", loss="sparse_categorical_crossentropy", metrics="accuracy")
 
+
+    # network = keras.models.Sequential()
+    # network.add(keras.layers.Dense(512, activation='relu', input_shape=(28 * 28,)))
+    # network.add(keras.layers.Dense(10, activation='softmax'))
+    # network.compile(optimizer='rmsprop',
+    #                 loss='categorical_crossentropy',
+    #                 metrics=['accuracy'])
+
+
+
+    # inputs = keras.layers.Input(input_shape=(28, 28))
+    # x = keras.layers.Dense(128, activation=tf.nn.relu)(inputs)
+    # outputs = keras.layers.Dense(10, activation=tf.nn.softmax)(x)
+    # model = keras.Model(inputs=inputs, outputs=outputs)
+    # model.compile(optimizer="Adam", loss="sparse_categorical_crossentropy", metrics="accuracy")
     return model
 
 
@@ -51,8 +71,9 @@ def confMatrix(labels, pred):
     # waarden (labels). Check de documentatie van tf.math.confusion_matrix
     
     # YOUR CODE HERE
-    pass
-    
+    cf = tf.math.confusion_matrix(labels, pred)
+    print(cf)
+    return cf
 
 # OPGAVE 2b
 def confEls(conf, labels): 
