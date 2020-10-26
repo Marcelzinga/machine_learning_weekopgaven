@@ -63,7 +63,6 @@ def confMatrix(labels, pred):
     
     # YOUR CODE HERE
     cf = tf.math.confusion_matrix(labels, pred)
-    print(cf)
     return cf
 
 # OPGAVE 2b
@@ -79,7 +78,12 @@ def confEls(conf, labels):
     # Check de documentatie van numpy diagonal om de eerste waarde te bepalen.
  
     # YOUR CODE HERE
-    pass
+    tp = np.diag(conf)
+    fp = conf.sum(axis=0) - tp
+    fn = conf.sum(axis=1) - tp
+    tn = conf.sum() - (tp + fp + fn)
+
+    return list(zip(labels, tp, fp, fn, tn))
 
 # OPGAVE 2c
 def confData(metrics):
