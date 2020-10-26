@@ -37,7 +37,6 @@ else:
     hyp = labels[train_labels[rnd]]
     plotImage(train_images[rnd], hyp)
 
-
 # ===============  OPGAVE 1b ======================
 X = np.array( ([1,2,3,4],[2,2,4,4],[4,3,2,1]) )
 r = X/4
@@ -55,7 +54,12 @@ test_images = scaleData(test_images)
 print ("")
 print ("Aanmaken van het model.")
 model = buildModel()
-print ("Trainen van het model...") 
+
+print ("Trainen van het model...")
+#
+train_images = train_images.reshape((60_000, 28*28))
+test_images = test_images.reshape((10_000, 28*28))
+print(train_images)
 model.fit(train_images, train_labels, epochs=6)
 print ("Training afgerond.")
 
@@ -65,10 +69,16 @@ print ("")
 print ("Bepalen van de confusion matrix van het getrainde netwerk.")
 pred = np.argmax(model.predict(test_images), axis=1)
 cm = confMatrix(test_labels, pred)
+print("---")
+import seaborn as sns
+sns.heatmap(cm)
 
-sess = tf.Session()
+print("---")
+
+sess = tf.Session() # tf.Session bestaat niet?
+sess = tf.compat.v1.Session
 with sess.as_default():
-    data = cm.eval() 
+    data = cm.eval()
 
 print ("De confusion matrix:") 
 if (len(sys.argv)>1 and sys.argv[1]=='skip') :
