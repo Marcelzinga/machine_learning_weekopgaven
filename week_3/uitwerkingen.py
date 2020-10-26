@@ -48,15 +48,6 @@ def buildModel():
     model.compile(optimizer="Adam", loss="sparse_categorical_crossentropy", metrics="accuracy")
 
 
-    # network = keras.models.Sequential()
-    # network.add(keras.layers.Dense(512, activation='relu', input_shape=(28 * 28,)))
-    # network.add(keras.layers.Dense(10, activation='softmax'))
-    # network.compile(optimizer='rmsprop',
-    #                 loss='categorical_crossentropy',
-    #                 metrics=['accuracy'])
-
-
-
     # inputs = keras.layers.Input(input_shape=(28, 28))
     # x = keras.layers.Dense(128, activation=tf.nn.relu)(inputs)
     # outputs = keras.layers.Dense(10, activation=tf.nn.softmax)(x)
