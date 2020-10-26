@@ -127,9 +127,11 @@ def nnCheckGradients(Theta1, Theta2, X, y):
         d3 = a3[i] - ysparse[i]
         d3 = d3.reshape(10, 1)
 
+        # voeg 1 toe
         sigmoidgrad = np.concatenate((np.ones(1), sigmoidGradient(z2[i])), axis=0)
         d2 = np.multiply(np.dot(d3.T, Theta2), sigmoidgrad.T)
-        d2 = np.delete(d2, 0).reshape(25, 1) #remove de bias
+        # verwijder het resultaat van de bias, want de bias wordt niet geupdated
+        d2 = np.delete(d2, 0).reshape(25, 1)
 
         Delta3 += np.dot(d3, a2[i].reshape(1, 26))
         Delta2 += np.dot(d2, a1[i].reshape(1, 401))
