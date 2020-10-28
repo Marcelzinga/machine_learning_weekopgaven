@@ -59,7 +59,6 @@ print ("Trainen van het model...")
 #
 train_images = train_images.reshape((60_000, 28*28))
 test_images = test_images.reshape((10_000, 28*28))
-print(train_images)
 model.fit(train_images, train_labels, epochs=6)
 print ("Training afgerond.")
 
