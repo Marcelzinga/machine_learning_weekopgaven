@@ -93,14 +93,20 @@ def confData(metrics):
     # vorm van een dictionary (de scaffold hiervan is gegeven).
 
     # VERVANG ONDERSTAANDE REGELS MET JE EIGEN CODE
-    
-    tp = 1
-    fp = 1
-    fn = 1
-    tn = 1
+    #TODO werkt niet
+    tp = sum([metric[1] for metric in metrics])
+    fp = sum([metric[2] for metric in metrics])
+    fn = sum([metric[3] for metric in metrics])
+    tn = sum([metric[4] for metric in metrics])
+
 
     # BEREKEN HIERONDER DE JUISTE METRIEKEN EN RETOURNEER DIE 
     # ALS EEN DICTIONARY
 
-    rv = {'tpr':0, 'ppv':0, 'tnr':0, 'fpr':0 }
+    TPR = tp/(tp+fn)
+    PPV = tp/(tp+fp)
+    TNR = tn/(tn+fp)
+    FPR = fp/(fp+tn)
+
+    rv = {'tpr': TPR, 'ppv': PPV, 'tnr': TNR, 'fpr': FPR }
     return rv
