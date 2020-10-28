@@ -34,7 +34,7 @@ def get_y_matrix(y, m):
     # y en m
     row = np.arange(m)
     col = np.subtract(y, 1).reshape(m)
-    return csr_matrix((np.ones(m), (row, col))).toarray()
+    return csr_matrix((np.ones(m), (row, col))).todense()
 
 
 # ==== OPGAVE 2c ==== 
