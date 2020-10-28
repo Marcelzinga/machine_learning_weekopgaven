@@ -113,21 +113,22 @@ def nnCheckGradients(Theta1, Theta2, X, y):
     ysparse = get_y_matrix(y, y.shape[0])
 
     # forward propagation
-    a1 = np.c_[np.ones(m), X]
-    z2 = np.dot(a1, Theta1.T)
-    a2 = sigmoid(z2)
+    a1 = np.c_[np.ones(m), X]  # input layer + bias
 
-    a2 = np.c_[np.ones(m), a2]
+    z2 = np.dot(a1, Theta1.T)
+    a2 = sigmoid(z2)  # De activatie
+    a2 = np.c_[np.ones(m), a2]  # hidden layer + bias
+
     z3 = np.dot(a2, Theta2.T)
-    a3 = sigmoid(z3)
+    a3 = sigmoid(z3)  # output layer
 
     # back propagation
     for i in range(m):
         #YOUR CODE HERE
-        d3 = a3[i] - ysparse[i]
+        d3 = np.subtract(a3[i], ysparse[i])  # delta3 is de fout op deze node, ysparse is het resultaat dat klopt
         d3 = d3.reshape(10, 1)
 
-        # voeg 1 toe
+        # voeg 1 toe aan de sigmoidGradient
         sigmoidgrad = np.concatenate((np.ones(1), sigmoidGradient(z2[i])), axis=0)
         d2 = np.multiply(np.dot(d3.T, Theta2), sigmoidgrad.T)
         # verwijder het resultaat van de bias, want de bias wordt niet geupdated
@@ -135,8 +136,6 @@ def nnCheckGradients(Theta1, Theta2, X, y):
 
         Delta3 += np.dot(d3, a2[i].reshape(1, 26))
         Delta2 += np.dot(d2, a1[i].reshape(1, 401))
-
-
 
     Delta2_grad = Delta2 / m
     Delta3_grad = Delta3 / m
