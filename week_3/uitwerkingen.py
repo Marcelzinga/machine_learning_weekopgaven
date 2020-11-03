@@ -40,10 +40,8 @@ def buildModel():
 
     # YOUR CODE HERE
     model = keras.Sequential()
-    #model.add(tf.keras.Input(shape=(28 * 28,)))
-    #model.add(tf.keras.layers.Dense(784))
-    #TODO de eerste layer moet 28*28 matrix veranderen in 784
-    model.add(keras.layers.Dense(128, activation=tf.nn.relu, input_shape=(28*28,)))
+    model.add(keras.layers.Reshape((784,), input_shape=(28, 28)))
+    model.add(keras.layers.Dense(128, activation=tf.nn.relu))
     model.add(keras.layers.Dense(10, activation=tf.nn.softmax))
     model.compile(optimizer="Adam", loss="sparse_categorical_crossentropy", metrics="accuracy")
 
