@@ -108,7 +108,7 @@ def nnCheckGradients(Theta1, Theta2, X, y):
 
     Delta2 = np.zeros(Theta1.shape)
     Delta3 = np.zeros(Theta2.shape)
-    m = X.shape[0] #voorbeeldwaarde; dit moet je natuurlijk aanpassen naar de echte waarde van m
+    m = X.shape[0]  #voorbeeldwaarde; dit moet je natuurlijk aanpassen naar de echte waarde van m
 
     ysparse = get_y_matrix(y, y.shape[0])
 
