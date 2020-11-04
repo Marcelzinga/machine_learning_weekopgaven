@@ -91,7 +91,6 @@ def confData(metrics):
     # vorm van een dictionary (de scaffold hiervan is gegeven).
 
     # VERVANG ONDERSTAANDE REGELS MET JE EIGEN CODE
-    #TODO werkt niet
     tp = sum([metric[1] for metric in metrics])
     fp = sum([metric[2] for metric in metrics])
     fn = sum([metric[3] for metric in metrics])
