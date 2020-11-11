@@ -99,7 +99,6 @@ def confData(metrics):
 
     # BEREKEN HIERONDER DE JUISTE METRIEKEN EN RETOURNEER DIE 
     # ALS EEN DICTIONARY
-
     TPR = tp/(tp+fn)
     PPV = tp/(tp+fp)
     TNR = tn/(tn+fp)

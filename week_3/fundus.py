@@ -77,7 +77,7 @@ plt.show()
 
 
 model = tf.keras.Sequential([
-    #keras.layers.experimental.preprocessing.Rescaling(1./255, input_shape=(75, 75, 3)), #dit zorgt ervoor dat alles 29 word?
+    #keras.layers.experimental.preprocessing.Rescaling(1./255), #dit zorgt ervoor dat alles 29 word?
     keras.layers.Conv2D(16, 3, activation='relu'),
     keras.layers.MaxPooling2D(),
     keras.layers.Conv2D(32, 3, activation='relu'),
@@ -89,25 +89,29 @@ model = tf.keras.Sequential([
     keras.layers.Dense(len(class_names))
 ])
 
-
 model.compile(
     optimizer='adam',
     loss=tf.losses.SparseCategoricalCrossentropy(from_logits=True),
     metrics=['accuracy']
 )
 
-from skimage import io
-#gray_training_data = train_ds.map(lambda x, y: (io.imread(x, pilmode='L'), y))
+
+train_images = tf.image.rgb_to_grayscale(train_images)
+val_images = tf.image.rgb_to_grayscale(val_images)
+# train_images = train_images.numpy().reshape(800, 75, 75)
+# val_images = val_images.numpy().reshape(200, 75, 75)
+
 
 epochs = 20
 history = model.fit(
     train_images,
     train_labels,
-    validation_data=val_ds,
+    validation_data=(val_images, val_labels),
     epochs=epochs,
     batch_size=128
 )
-
+model.summary()
+print("evaluate model")
 test_loss, test_acc = model.evaluate(val_images, val_labels)
 print('test_acc:', test_acc)
 
