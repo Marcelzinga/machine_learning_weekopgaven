@@ -7,8 +7,15 @@ import matplotlib.pyplot as plt
 from random import randint
 
 
-def plotMatrix(data):
-    plt.matshow(data)
+def plotMatrix(cm_testdata, cm_valdata2):
+
+    fig, axes = plt.subplots(1, 2)
+    axes[0].matshow(cm_testdata)
+    axes[0].set_title("Test data")
+
+    axes[1].matshow(cm_valdata2)
+    axes[1].set_title("Validation data")
+
     plt.show()
 
 print ("Laden van de data...")
@@ -92,21 +99,15 @@ model.compile(
     loss=tf.losses.SparseCategoricalCrossentropy(from_logits=True),
     metrics=['accuracy']
 )
-AUTOTUNE = tf.data.experimental.AUTOTUNE
-
-train_ds = train_ds.cache().prefetch(buffer_size=AUTOTUNE)
-val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
+# AUTOTUNE = tf.data.experimental.AUTOTUNE
+# train_ds = train_ds.cache().prefetch(buffer_size=AUTOTUNE)
+# val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
 
 
 #train_images = keras.utils.to_categorical(train_images)
 #train_labels = keras.utils.to_categorical(train_labels)
 
-# model.fit(
-#     train_images,
-#     train_labels,
-#     epochs=5,
-#     #batch_size=128,
-# )
+
 from skimage import io
 #gray_training_data = train_ds.map(lambda x, y: (io.imread(x, pilmode='L'), y))
 
@@ -115,28 +116,28 @@ model.fit(
     train_images,
     train_labels,
     validation_data=val_ds,
-    epochs=25 #35 #45 ?
+    epochs=30, #35 #45 ?
+    batch_size=128
 )
 
 
 print("Predict met bekende data, zal hoge accuratesse hebben")
 pred = np.argmax(model.predict(train_images), axis=1)
 cm = confMatrix(train_labels, pred)
-data = cm.numpy()
+cm_testdata = cm.numpy()
 print("De confusion matrix:")
 
-plotMatrix(data)
-print(data)
+print(cm_testdata)
 
 print("Predict met validatie data")
 pred = np.argmax(model.predict(val_images), axis=1)
 cm = confMatrix(val_labels, pred)
-data = cm.numpy()
+cm_valdata = cm.numpy()
 print("De confusion matrix:")
 
 # Er wordt veel 29 gepredict. #TODO verbeter het netwerk?
-plotMatrix(data)
-print(data)
+plotMatrix(cm_testdata, cm_valdata)
+print(cm_valdata)
 
 print("Bepalen van de tp, tn, fp, fn")
 metrics = confEls(data, train_labels)
