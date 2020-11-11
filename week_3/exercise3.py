@@ -9,7 +9,7 @@ from uitwerkingen import *
 # ==============================================
 # HELPER FUNCTIES
 def plotMatrix(data):
-    plt.figure()
+    #plt.figure()
     plt.matshow(data)
     plt.show()
 
