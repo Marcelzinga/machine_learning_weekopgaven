@@ -47,10 +47,12 @@ for image_batch, labels_batch in train_ds.take(1): # todo kijk hier nog eens naa
     train_images = image_batch.numpy()
     train_labels = labels_batch.numpy()
 
-for image_batch, labels_batch in train_ds.take(2): # todo kijk hier nog eens naar
-    print("formaat train_ds.take(2)" + str(image_batch.shape))
+for image_batch, labels_batch in val_ds.take(1):
+    print("formaat van de val_ds batch" + str(image_batch.shape))
     print(labels_batch.shape)
     val_images = image_batch.numpy()
+    val_labels = labels_batch.numpy()
+
 
 
 class_names = train_ds.class_names
@@ -64,6 +66,8 @@ for images, labels in train_ds.take(1):
     plt.axis("off")
 
     training_data = images.numpy()
+
+
     train_labels = labels.numpy()
 
 plt.show()
@@ -136,17 +140,21 @@ val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
 #     epochs=5,
 #     #batch_size=128,
 # )
+from skimage import io
+#gray_training_data = train_ds.map(lambda x, y: (io.imread(x, pilmode='L'), y))
+
 
 model.fit(
-    train_ds,
+    train_images,
+    train_labels,
     validation_data=val_ds,
-    epochs=30
+    epochs=35 #45 ?
 )
 
 
 #TODO test model
-pred = np.argmax(model.predict(train_ds), axis=1)
-cm = confMatrix(train_labels, pred)
+pred = np.argmax(model.predict(val_images), axis=1)
+cm = confMatrix(val_labels, pred)
 data = cm.numpy()
 print("De confusion matrix:")
 
