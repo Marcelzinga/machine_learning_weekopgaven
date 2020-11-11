@@ -3,10 +3,8 @@ import tensorflow as tf
 from tensorflow import keras
 import numpy as np
 import os
-import pathlib
 import matplotlib.pyplot as plt
 from random import randint
-import sys
 
 
 def plotMatrix(data):
@@ -24,7 +22,6 @@ current_directory = os.path.join(os.path.dirname(__file__))
 data_dir = os.path.join(current_directory, "Fundus-data")
 
 
-#TODO uit Fundus-data de eerste 80 % train data de overgebleven 20 test data
 train_ds = keras.preprocessing.image_dataset_from_directory(
     data_dir,
     validation_split=0.2,
@@ -53,8 +50,6 @@ for image_batch, labels_batch in val_ds.take(1):
     val_images = image_batch.numpy()
     val_labels = labels_batch.numpy()
 
-
-
 class_names = train_ds.class_names
 
 rnd = randint(0, 800) #train_images.shape[0])
@@ -65,23 +60,8 @@ for images, labels in train_ds.take(1):
     plt.title(class_names[labels[rnd]])
     plt.axis("off")
 
-    training_data = images.numpy()
-
-
-    train_labels = labels.numpy()
-
 plt.show()
 
-for image_batch, labels_batch in train_ds:
-    print("formaat van de train_ds batch" + str(image_batch.shape))
-    print(labels_batch.shape)
-    break
-
-
-for image_batch, labels_batch in val_ds:
-    print("formaat van de val_ds batch" + str(image_batch.shape))
-    print(labels_batch.shape)
-    break
 
 #TODO build model en train
 #TODO kies activation+optimizer+loss+metrics welke passen bij deze dataset? waarom?
@@ -94,7 +74,7 @@ for image_batch, labels_batch in val_ds:
 
 
 model = tf.keras.Sequential([
-    keras.layers.experimental.preprocessing.Rescaling(1./255, input_shape=(75, 75, 3)),
+    #keras.layers.experimental.preprocessing.Rescaling(1./255, input_shape=(75, 75, 3)), #dit zorgt ervoor dat alles 29 word?
     keras.layers.Conv2D(16, 3, activation='relu'),
     keras.layers.MaxPooling2D(),
     keras.layers.Conv2D(32, 3, activation='relu'),
@@ -106,19 +86,6 @@ model = tf.keras.Sequential([
     keras.layers.Dense(len(class_names))
 ])
 
-# model = keras.Sequential([
-#     keras.layers.experimental.preprocessing.Rescaling(1./255, input_shape=(75, 75, 1)),  # scale the data
-#
-#     keras.layers.Conv2D(16, 3, padding='same', activation='relu'),
-#     keras.layers.MaxPooling2D(),
-#     keras.layers.Conv2D(32, 3, padding='same', activation='relu'),
-#     keras.layers.MaxPooling2D(),
-#     keras.layers.Flatten(),
-#     keras.layers.Dense(128, activation='relu'),
-#
-#     #keras.layers.Dense(512, activation=tf.nn.relu),
-#     keras.layers.Dense(len(class_names), activation=tf.nn.softmax)
-# ])
 
 model.compile(
     optimizer='adam',
@@ -148,21 +115,28 @@ model.fit(
     train_images,
     train_labels,
     validation_data=val_ds,
-    epochs=35 #45 ?
+    epochs=25 #35 #45 ?
 )
 
 
-#TODO test model
+print("Predict met bekende data, zal hoge accuratesse hebben")
+pred = np.argmax(model.predict(train_images), axis=1)
+cm = confMatrix(train_labels, pred)
+data = cm.numpy()
+print("De confusion matrix:")
+
+plotMatrix(data)
+print(data)
+
+print("Predict met validatie data")
 pred = np.argmax(model.predict(val_images), axis=1)
 cm = confMatrix(val_labels, pred)
 data = cm.numpy()
 print("De confusion matrix:")
 
-# Er wordt alleen 29 gepredict. dus is dat het enige wat true positive is #TODO verbeter het netwerk?
+# Er wordt veel 29 gepredict. #TODO verbeter het netwerk?
 plotMatrix(data)
-
 print(data)
-print(data.shape)
 
 print("Bepalen van de tp, tn, fp, fn")
 metrics = confEls(data, train_labels)
