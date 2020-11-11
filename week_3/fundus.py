@@ -7,15 +7,12 @@ import matplotlib.pyplot as plt
 from random import randint
 
 
-def plotMatrix(cm_testdata, cm_valdata2):
-
+def plotMatrix(cm_traindata, cm_valdata2):
     fig, axes = plt.subplots(1, 2)
-    axes[0].matshow(cm_testdata)
-    axes[0].set_title("Test data")
-
+    axes[0].matshow(cm_traindata)
+    axes[0].set_title("Training data")
     axes[1].matshow(cm_valdata2)
     axes[1].set_title("Validation data")
-
     plt.show()
 
 print ("Laden van de data...")
@@ -71,7 +68,6 @@ plt.show()
 
 
 #TODO build model en train
-#TODO kies activation+optimizer+loss+metrics welke passen bij deze dataset? waarom?
 # model = keras.Sequential([
 #     keras.layers.Reshape((75 * 75 * 3,), input_shape=(75, 75, 3)),
 #     keras.layers.experimental.preprocessing.Rescaling(1./255),  # scale the data
@@ -99,48 +95,69 @@ model.compile(
     loss=tf.losses.SparseCategoricalCrossentropy(from_logits=True),
     metrics=['accuracy']
 )
-# AUTOTUNE = tf.data.experimental.AUTOTUNE
-# train_ds = train_ds.cache().prefetch(buffer_size=AUTOTUNE)
-# val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
-
-
-#train_images = keras.utils.to_categorical(train_images)
-#train_labels = keras.utils.to_categorical(train_labels)
-
 
 from skimage import io
 #gray_training_data = train_ds.map(lambda x, y: (io.imread(x, pilmode='L'), y))
 
-
-model.fit(
+epochs = 20
+history = model.fit(
     train_images,
     train_labels,
     validation_data=val_ds,
-    epochs=30, #35 #45 ?
+    epochs=epochs,
     batch_size=128
 )
 
+test_loss, test_acc = model.evaluate(val_images, val_labels)
+print('test_acc:', test_acc)
+
+acc = history.history['accuracy']
+val_acc = history.history['val_accuracy']
+
+loss = history.history['loss']
+val_loss = history.history['val_loss']
+
+epochs_range = range(epochs)
+
+plt.figure(figsize=(8, 8))
+plt.subplot(1, 2, 1)
+plt.plot(epochs_range, acc, label='Training Accuracy')
+plt.plot(epochs_range, val_acc, label='Validation Accuracy')
+plt.legend(loc='lower right')
+plt.title('Training and Validation Accuracy')
+
+plt.subplot(1, 2, 2)
+plt.plot(epochs_range, loss, label='Training Loss')
+plt.plot(epochs_range, val_loss, label='Validation Loss')
+plt.legend(loc='upper right')
+plt.title('Training and Validation Loss')
+plt.show()
 
 print("Predict met bekende data, zal hoge accuratesse hebben")
 pred = np.argmax(model.predict(train_images), axis=1)
 cm = confMatrix(train_labels, pred)
-cm_testdata = cm.numpy()
-print("De confusion matrix:")
+cm_traindata = cm.numpy()
 
-print(cm_testdata)
 
 print("Predict met validatie data")
 pred = np.argmax(model.predict(val_images), axis=1)
 cm = confMatrix(val_labels, pred)
 cm_valdata = cm.numpy()
-print("De confusion matrix:")
 
 # Er wordt veel 29 gepredict. #TODO verbeter het netwerk?
-plotMatrix(cm_testdata, cm_valdata)
-print(cm_valdata)
+plotMatrix(cm_traindata, cm_valdata)
 
+print("Training data:")
 print("Bepalen van de tp, tn, fp, fn")
-metrics = confEls(data, train_labels)
+metrics = confEls(cm_traindata, train_labels)
+print(metrics)
+print("Bepalen van de scores:")
+scores = confData(metrics)
+print(scores)
+
+print("Validation data:")
+print("Bepalen van de tp, tn, fp, fn")
+metrics = confEls(cm_valdata, train_labels)
 print(metrics)
 print("Bepalen van de scores:")
 scores = confData(metrics)
